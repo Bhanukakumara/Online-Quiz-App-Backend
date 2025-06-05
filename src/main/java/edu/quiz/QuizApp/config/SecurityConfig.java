@@ -1,11 +1,9 @@
 package edu.quiz.QuizApp.config;
 
-import edu.quiz.QuizApp.enums.UserRole;
 import edu.quiz.QuizApp.filters.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "papers")
@@ -36,7 +36,20 @@ public class Paper {
     @Column(name = "attempt_number", nullable = false)
     private int attemptNumber;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "student_answers", columnDefinition = "json")
+    private List<StudentAnswer> studentAnswers = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enrollment_id", nullable = false)
     private Enrollment enrollment;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudentAnswer {
+        private Long questionId;
+        private Integer givenAnswer;
+    }
 }

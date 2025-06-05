@@ -51,4 +51,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         enrollment.setStudent(user);
         return Optional.of(enrollmentToGetEnrollmentDto(enrollmentRepository.save(enrollment)));
     }
+
+    @Override
+    public Enrollment getLastEnrollmentID(Long studentId, Long examId) {
+            return enrollmentRepository.findTopByStudentIdAndExamIdOrderByIdDesc(studentId, examId).orElse(null);
+    }
 }
