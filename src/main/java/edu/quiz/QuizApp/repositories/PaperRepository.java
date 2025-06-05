@@ -9,8 +9,4 @@ import java.util.List;
 
 @Repository
 public interface PaperRepository extends JpaRepository<Paper, Long> {
-    int countByStudentIdAndExamId(Long studentId, Long examId);
-    Integer countByEnrollmentId(Long id);
-    List<Paper> findByStudentId(Long studentId);
-    List<Paper> findByExamId(Long examId);
 }

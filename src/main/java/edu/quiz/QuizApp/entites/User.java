@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,22 +34,20 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
+    @Column(name = "role", nullable = false)
+    private String userRole;
 
-    // Teacher-specific relationships
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    private Set<Exam> teacherExams = new HashSet<>();
+    // One user can create many courses
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Course> courses;
 
-    // Student-specific relationships
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Set<Enrollment> studentEnrollments = new HashSet<>();
+    // One user can create many exams
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Exam> exams;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Set<Paper> studentPapers = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Question> questions;
 
-    // Admin-specific relationships
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
-    private Set<Course> adminCourses = new HashSet<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Enrollment> enrollments;
 }

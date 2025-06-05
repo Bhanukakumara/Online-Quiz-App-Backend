@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,22 +22,17 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private User student;
-
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
-
-    // Added this missing exam reference
-    @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
-    private Exam exam;
-
     @Column(name = "enrollment_date", nullable = false)
     private LocalDate enrollmentDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exam_id", nullable = false)
+    private Exam exam;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private User student;
+
     @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL)
-    private Set<Paper> papers = new HashSet<>();
+    private List<Paper> papers;
 }

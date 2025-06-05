@@ -1,21 +1,16 @@
 package edu.quiz.QuizApp.services;
 
-import edu.quiz.QuizApp.dtos.question.QuestionCreateDto;
-import edu.quiz.QuizApp.dtos.question.QuestionDto;
-import edu.quiz.QuizApp.dtos.question.QuestionUpdateDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import edu.quiz.QuizApp.dtos.question.CreateQuestionDto;
+import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionService {
-    QuestionDto createQuestion(QuestionCreateDto questionCreateDto);
-    QuestionDto getQuestionById(Long id);
-    QuestionDto updateQuestion(Long id, QuestionUpdateDto questionUpdateDto);
-    void deleteQuestion(Long id);
-    List<QuestionDto> getAllQuestions();
-    List<QuestionDto> getQuestionsByExamId(Long examId);
-    Page<QuestionDto> getQuestionsByExamId(Long examId, Pageable pageable);
-    boolean existsById(Long id);
-    long countQuestionsByExamId(Long examId);
+    Optional<GetQuestionDto> createQuestion(CreateQuestionDto createQuestionDto);
+    Optional<List<GetQuestionDto>> getAllQuestions();
+    Optional<GetQuestionDto> getQuestionById(long id);
+    Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId);
+    Optional<List<GetQuestionDto>> getAllQuestionsByUserId(long userId);
+    Optional<List<GetQuestionDto>> getQuestionPaperByExamId(long examId);
 }

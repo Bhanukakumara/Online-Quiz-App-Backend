@@ -12,5 +12,5 @@ import lombok.Setter;
 public class CreateCourseDto {
     private String name;
     private String description;
-    private Long createdBy;
+    private Long adminId;
 }

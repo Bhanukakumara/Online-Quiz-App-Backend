@@ -41,10 +41,14 @@ public class Question {
     @Column(name = "time_to_answer", nullable = false)
     private int timeToAnswer; // in seconds
 
-    @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
+    @Column(nullable = false)
+    private int marks;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exam_id", nullable = false, updatable = false)
     private Exam exam;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private Set<PaperQuestion> paperQuestions = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User user;
 }

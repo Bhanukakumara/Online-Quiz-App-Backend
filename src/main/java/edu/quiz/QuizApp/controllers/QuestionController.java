@@ -1,71 +1,61 @@
 package edu.quiz.QuizApp.controllers;
 
-import edu.quiz.QuizApp.dtos.question.QuestionCreateDto;
-import edu.quiz.QuizApp.dtos.question.QuestionDto;
-import edu.quiz.QuizApp.dtos.question.QuestionUpdateDto;
+import edu.quiz.QuizApp.dtos.question.CreateQuestionDto;
+import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 import edu.quiz.QuizApp.services.QuestionService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/auth/question")
+@RequestMapping("/api/question")
 @RequiredArgsConstructor
 @CrossOrigin
 public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping("/create")
-    public ResponseEntity<QuestionDto> createQuestion(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
-        QuestionDto createdQuestion = questionService.createQuestion(questionCreateDto);
-        return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/get-by-id/{id}")
-    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable Long id) {
-        QuestionDto question = questionService.getQuestionById(id);
-        return ResponseEntity.ok(question);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<QuestionDto> updateQuestion(
-            @PathVariable Long id,
-            @Valid @RequestBody QuestionUpdateDto questionUpdateDto) {
-        QuestionDto updatedQuestion = questionService.updateQuestion(id, questionUpdateDto);
-        return ResponseEntity.ok(updatedQuestion);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
-        questionService.deleteQuestion(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<GetQuestionDto> createQuestion(@RequestBody CreateQuestionDto createQuestionDto) {
+        Optional<GetQuestionDto> question = questionService.createQuestion(createQuestionDto);
+        return question.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<QuestionDto>> getAllQuestions() {
-        List<QuestionDto> questions = questionService.getAllQuestions();
-        return ResponseEntity.ok(questions);
+    public ResponseEntity<List<GetQuestionDto>> getAllQuestions() {
+        Optional<List<GetQuestionDto>> questions = questionService.getAllQuestions();
+        return questions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/exam/{examId}")
-    public ResponseEntity<List<QuestionDto>> getQuestionsByExamId(@PathVariable Long examId) {
-        List<QuestionDto> questions = questionService.getQuestionsByExamId(examId);
-        return ResponseEntity.ok(questions);
+    @GetMapping("/get-bt-id/{id}")
+    public ResponseEntity<GetQuestionDto> getQuestionById(@PathVariable long id) {
+        Optional<GetQuestionDto> question = questionService.getQuestionById(id);
+        return question.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}/exists")
-    public ResponseEntity<Boolean> questionExists(@PathVariable Long id) {
-        boolean exists = questionService.existsById(id);
-        return ResponseEntity.ok(exists);
+    @GetMapping("/get-by-examId/{examId}")
+    public ResponseEntity<List<GetQuestionDto>> getQuestionsByExamId(@PathVariable long examId) {
+        Optional<List<GetQuestionDto>> questions = questionService.getAllQuestionByExamId(examId);
+        return questions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/exam/{examId}/count")
-    public ResponseEntity<Long> countQuestionsByExamId(@PathVariable Long examId) {
-        long count = questionService.countQuestionsByExamId(examId);
-        return ResponseEntity.ok(count);
+    @GetMapping("/get-by-userId/{userId}")
+    public ResponseEntity<List<GetQuestionDto>> getQuestionsByTeacherId(@PathVariable long userId) {
+        Optional<List<GetQuestionDto>> questions = questionService.getAllQuestionsByUserId(userId);
+        return questions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/get-question-paper-by-examId/{examId}")
+    public ResponseEntity<List<GetQuestionDto>> getQuestionPaperByExamId(@PathVariable long examId) {
+        Optional<List<GetQuestionDto>> questions = questionService.getQuestionPaperByExamId(examId);
+        return questions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

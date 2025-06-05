@@ -9,13 +9,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExamSummaryDTO {
+public class GetExamDTO {
     private Long id;
     private String title;
     private String description;
     private int questionCount;
     private int maxAttempts;
-    private int totalTimeMinutes;
+    private Long courseId;
     private String courseName;
+    private Long teacherId;
     private String teacherName;
 }

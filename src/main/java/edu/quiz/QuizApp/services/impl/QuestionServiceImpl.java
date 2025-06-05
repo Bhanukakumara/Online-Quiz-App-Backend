@@ -1,22 +1,24 @@
 package edu.quiz.QuizApp.services.impl;
 
-import edu.quiz.QuizApp.dtos.question.QuestionCreateDto;
-import edu.quiz.QuizApp.dtos.question.QuestionDto;
-import edu.quiz.QuizApp.dtos.question.QuestionUpdateDto;
+import edu.quiz.QuizApp.dtos.question.CreateQuestionDto;
+import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 import edu.quiz.QuizApp.entites.Exam;
 import edu.quiz.QuizApp.entites.Question;
-import edu.quiz.QuizApp.exceptions.ResourceNotFoundException;
+import edu.quiz.QuizApp.entites.User;
 import edu.quiz.QuizApp.repositories.ExamRepository;
 import edu.quiz.QuizApp.repositories.QuestionRepository;
+import edu.quiz.QuizApp.repositories.UserRepository;
 import edu.quiz.QuizApp.services.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,133 +27,93 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final ExamRepository examRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
+    public GetQuestionDto questionToGetQuestionDto(Question question) {
+        return new GetQuestionDto(
+                question.getId(),
+                question.getText(),
+                question.getOption1(),
+                question.getOption2(),
+                question.getOption3(),
+                question.getOption4(),
+                question.getCorrectOption(),
+                question.getTimeToAnswer(),
+                question.getExam().getId(),
+                question.getExam().getTitle(),
+                question.getUser().getId()
+        );
+    }
 
     @Override
-    public QuestionDto createQuestion(QuestionCreateDto questionCreateDto) {
-        // Verify exam exists
-        Exam exam = examRepository.findById(questionCreateDto.getExamId())
-                .orElseThrow(() -> new ResourceNotFoundException("Exam not found with ID: " + questionCreateDto.getExamId()));
+    public Optional<GetQuestionDto> createQuestion(CreateQuestionDto createQuestionDto) {
+        Exam exam = examRepository.findById(createQuestionDto.getExamId()).orElseThrow(() -> new RuntimeException("Exam not found"));
+        User user = userRepository.findById(createQuestionDto.getTeacherId()).orElseThrow(() -> new RuntimeException("Teacher not found"));
+        Question question = getQuestion(createQuestionDto, exam, user);
+        return Optional.of(questionToGetQuestionDto(questionRepository.save(question)));
+    }
 
+    private static Question getQuestion(CreateQuestionDto createQuestionDto, Exam exam, User user) {
         Question question = new Question();
-        question.setText(questionCreateDto.getText());
-        question.setOption1(questionCreateDto.getOption1());
-        question.setOption2(questionCreateDto.getOption2());
-        question.setOption3(questionCreateDto.getOption3());
-        question.setOption4(questionCreateDto.getOption4());
-        question.setCorrectOption(questionCreateDto.getCorrectOption());
-        question.setTimeToAnswer(questionCreateDto.getTimeToAnswer());
+        question.setText(createQuestionDto.getText());
+        question.setOption1(createQuestionDto.getOption1());
+        question.setOption2(createQuestionDto.getOption2());
+        question.setOption3(createQuestionDto.getOption3());
+        question.setOption4(createQuestionDto.getOption4());
+        question.setCorrectOption(createQuestionDto.getCorrectOption());
+        question.setTimeToAnswer(createQuestionDto.getTimeToAnswer());
+        question.setMarks(createQuestionDto.getMarks());
         question.setExam(exam);
-
-        Question savedQuestion = questionRepository.save(question);
-        return convertToDto(savedQuestion);
+        question.setUser(user);
+        return question;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public QuestionDto getQuestionById(Long id) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Question not found with ID: " + id));
-        return convertToDto(question);
+    public Optional<List<GetQuestionDto>> getAllQuestions() {
+        List<GetQuestionDto> questions = new ArrayList<>();
+        questionRepository.findAll().forEach(question -> questions.add(questionToGetQuestionDto(question)));
+        return Optional.of(questions);
     }
 
     @Override
-    public QuestionDto updateQuestion(Long id, QuestionUpdateDto questionUpdateDto) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Question not found with ID: " + id));
-
-        // Update only non-null fields
-        if (questionUpdateDto.getText() != null) {
-            question.setText(questionUpdateDto.getText());
-        }
-        if (questionUpdateDto.getOption1() != null) {
-            question.setOption1(questionUpdateDto.getOption1());
-        }
-        if (questionUpdateDto.getOption2() != null) {
-            question.setOption2(questionUpdateDto.getOption2());
-        }
-        if (questionUpdateDto.getOption3() != null) {
-            question.setOption3(questionUpdateDto.getOption3());
-        }
-        if (questionUpdateDto.getOption4() != null) {
-            question.setOption4(questionUpdateDto.getOption4());
-        }
-        if (questionUpdateDto.getCorrectOption() != null) {
-            question.setCorrectOption(questionUpdateDto.getCorrectOption());
-        }
-        if (questionUpdateDto.getTimeToAnswer() != null) {
-            question.setTimeToAnswer(questionUpdateDto.getTimeToAnswer());
-        }
-
-        Question updatedQuestion = questionRepository.save(question);
-        return convertToDto(updatedQuestion);
+    public Optional<GetQuestionDto> getQuestionById(long id) {
+        return questionRepository.findById(id).map(this::questionToGetQuestionDto);
     }
 
     @Override
-    public void deleteQuestion(Long id) {
-        if (!questionRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Question not found with ID: " + id);
-        }
-        questionRepository.deleteById(id);
+    public Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId) {
+        List<GetQuestionDto> questions = new ArrayList<>();
+        questionRepository.findAllByExamId(examId).forEach(question -> questions.add(questionToGetQuestionDto(question)));
+        return Optional.of(questions);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<QuestionDto> getAllQuestions() {
-        List<QuestionDto> questions = new ArrayList<>();
-        questionRepository.findAll().forEach(question -> questions.add(convertToDto(question)));
-        return questions;
+    public Optional<List<GetQuestionDto>> getAllQuestionsByUserId(long userId) {
+        List<GetQuestionDto> questions = new ArrayList<>();
+        questionRepository.findAllByUserId(userId).forEach(question -> questions.add(questionToGetQuestionDto(question)));
+        return Optional.of(questions);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<QuestionDto> getQuestionsByExamId(Long examId) {
-        // Verify exam exists
-        if (!examRepository.existsById(examId)) {
-            throw new ResourceNotFoundException("Exam not found with ID: " + examId);
+    public Optional<List<GetQuestionDto>> getQuestionPaperByExamId(long examId) {
+
+        Exam exam = examRepository.findById(examId).orElseThrow(() -> new RuntimeException("Exam not found"));
+        List<Question> allQuestionByExamId = questionRepository.findAllByExamId(examId);
+
+        if (exam.getQuestionCount() > allQuestionByExamId.size()) {
+            throw new RuntimeException(String.format("Exam requires %d questions but only %d available", exam.getQuestionCount(), allQuestionByExamId.size()));
         }
 
-        List<Question> questions = questionRepository.findByExamId(examId);
-        return questions.stream()
-                .map(this::convertToDto)
+        Collections.shuffle(allQuestionByExamId);
+        List<Question> randomQuestions = allQuestionByExamId.stream()
+                .limit(exam.getQuestionCount())
                 .collect(Collectors.toList());
-    }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<QuestionDto> getQuestionsByExamId(Long examId, Pageable pageable) {
-        // Verify exam exists
-        if (!examRepository.existsById(examId)) {
-            throw new ResourceNotFoundException("Exam not found with ID: " + examId);
-        }
+        List<GetQuestionDto> randomQuestionList = randomQuestions.stream()
+                .map(this::questionToGetQuestionDto)
+                .collect(Collectors.toList());
 
-        Page<Question> questions = questionRepository.findByExamId(examId, pageable);
-        return questions.map(this::convertToDto);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean existsById(Long id) {
-        return questionRepository.existsById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public long countQuestionsByExamId(Long examId) {
-        return questionRepository.countByExamId(examId);
-    }
-
-    private QuestionDto convertToDto(Question question) {
-        QuestionDto dto = new QuestionDto();
-        dto.setId(question.getId());
-        dto.setText(question.getText());
-        dto.setOption1(question.getOption1());
-        dto.setOption2(question.getOption2());
-        dto.setOption3(question.getOption3());
-        dto.setOption4(question.getOption4());
-        dto.setCorrectOption(question.getCorrectOption());
-        dto.setTimeToAnswer(question.getTimeToAnswer());
-        dto.setExamId(question.getExam().getId());
-        dto.setExamTitle(question.getExam().getTitle()); // Assuming Exam has a title field
-        return dto;
+        return Optional.of(randomQuestionList);
     }
 }

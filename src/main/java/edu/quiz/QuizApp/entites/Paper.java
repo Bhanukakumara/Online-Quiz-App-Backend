@@ -28,26 +28,15 @@ public class Paper {
     private Date endTime;
 
     @Column(name = "total_marks")
-    private Double totalMarks;
+    private int totalMarks;
 
     @Column(name = "obtained_marks")
-    private Double obtainedMarks;
+    private int obtainedMarks;
 
     @Column(name = "attempt_number", nullable = false)
     private int attemptNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private User student;
-
-    @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
-    private Exam exam;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enrollment_id", nullable = false)
     private Enrollment enrollment;
-
-    @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
-    private Set<PaperQuestion> paperQuestions = new HashSet<>();
 }

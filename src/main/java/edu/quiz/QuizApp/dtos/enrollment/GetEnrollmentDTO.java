@@ -11,11 +11,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnrollmentResponseDTO {
+public class GetEnrollmentDTO {
     private Long id;
-    private String studentName;
-    private String courseName;
-    private String examTitle;
+    private Long studentId;
+    private Long examId;
     private LocalDate enrollmentDate;
-    private Integer activePapers;
 }

@@ -10,15 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ExamRepository extends JpaRepository<Exam, Long> {
-    List<Exam> findByCourseId(Long courseId);
-    List<Exam> findByTeacherId(Long teacherId);
-    long countByCourseId(Long courseId);
-    long countByTeacherId(Long teacherId);
-
-    @Query("SELECT e FROM Exam e WHERE LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%'))")
-    List<Exam> findByTitleContainingIgnoreCase(@Param("title") String title);
-
-    List<Exam> findByCourseIdAndTeacherId(Long courseId, Long teacherId);
-    List<Exam> findByQuestionCountGreaterThan(int questionCount);
-    List<Exam> findByTotalTimeMinutesBetween(int minTime, int maxTime);
+    List<Exam> findAllByCourseId(Long courseId);
+    List<Exam> findAllByUserId(Long teacherId);
 }

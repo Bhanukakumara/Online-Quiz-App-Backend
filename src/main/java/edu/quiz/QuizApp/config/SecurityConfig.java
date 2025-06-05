@@ -1,9 +1,11 @@
 package edu.quiz.QuizApp.config;
 
+import edu.quiz.QuizApp.enums.UserRole;
 import edu.quiz.QuizApp.filters.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -49,15 +52,16 @@ public class SecurityConfig {
                         c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->auth
-                        .requestMatchers("/v3/api-docs/**","/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
-//                        .requestMatchers(HttpMethod.PUT,"/api/auth/user/create").hasRole(UserRole.ADMIN.name())
-//                        .requestMatchers(HttpMethod.GET,"/api/auth/user/get-by-username/").hasRole(UserRole.ADMIN.name())
-//                        .requestMatchers(HttpMethod.GET,"/api/auth/user/get-by-id/**").hasRole(UserRole.ADMIN.name())
-//                        .requestMatchers(HttpMethod.GET,"/api/auth/user/get-by-email/**").hasRole(UserRole.ADMIN.name())
-//                        .requestMatchers(HttpMethod.GET,"/api/auth/user/get-all").permitAll()
-//                        .requestMatchers(HttpMethod.DELETE,"/api/auth/user/delete-by-id/").hasRole(UserRole.ADMIN.name())
-                        .anyRequest().permitAll()
-                )
+//                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                        .requestMatchers(HttpMethod.PUT, "/api/auth/user/create").hasRole(UserRole.ADMIN.name())
+//                        .requestMatchers(HttpMethod.GET,"/api/auth/user/get-all").hasRole(UserRole.ADMIN.name())
+//                        .requestMatchers(HttpMethod.POST, "/api/auth/course/create").hasRole(UserRole.ADMIN.name())
+//                        .requestMatchers(HttpMethod.GET, "/api/auth/course/get-all").hasAnyRole(UserRole.ADMIN.name(), UserRole.TEACHER.name())
+//                        .requestMatchers(HttpMethod.POST, "/api/auth/exam/create").hasAnyRole(UserRole.ADMIN.name(), UserRole.TEACHER.name())
+//                        .requestMatchers(HttpMethod.GET, "/api/auth/exam/get-all").hasAnyRole(UserRole.ADMIN.name(), UserRole.TEACHER.name(), UserRole.STUDENT.name())
+//                        .requestMatchers(HttpMethod.POST, "/api/auth/question/create").hasAnyRole(UserRole.ADMIN.name(), UserRole.TEACHER.name())
+                        .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

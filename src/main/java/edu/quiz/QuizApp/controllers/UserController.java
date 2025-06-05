@@ -1,59 +1,61 @@
 package edu.quiz.QuizApp.controllers;
 
 import edu.quiz.QuizApp.dtos.user.CreateUserDto;
-import edu.quiz.QuizApp.dtos.user.RequestUserDto;
-import edu.quiz.QuizApp.entites.User;
+import edu.quiz.QuizApp.dtos.user.GetUserDto;
+import edu.quiz.QuizApp.enums.UserRole;
 import edu.quiz.QuizApp.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("api/auth/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
     private final UserService userService;
 
-    @PutMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
-        return ResponseEntity.ok(userService.createUser(createUserDto));
-    }
-    @GetMapping("/get-by-id/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        if (userService.getUserById(id).isPresent()) {
-            return ResponseEntity.ok(userService.getUserById(id).get());
-        }
-        return ResponseEntity.notFound().build();
-    }
-    @GetMapping("/get-by-username/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        if (userService.getUserByUsername(username).isPresent()) {
-            return ResponseEntity.ok(userService.getUserByUsername(username).get());
-        }
-        return ResponseEntity.notFound().build();
-    }
-    @GetMapping("/get-by-email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        if (userService.getUserByEmail(email).isPresent()) {
-            return ResponseEntity.ok(userService.getUserByEmail(email).get());
-        }
-        return ResponseEntity.notFound().build();
-    }
-    @GetMapping("/get-all")
-    public ResponseEntity<List<RequestUserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    @PostMapping("/create")
+    public ResponseEntity<GetUserDto> createUser(@RequestBody CreateUserDto createUserDto) {
+        Optional<GetUserDto> user = userService.createUser(createUserDto);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @DeleteMapping("/delete-by-id/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
-        if (userService.getUserById(id).isPresent()) {
-            userService.deleteUser(id);
-            return ResponseEntity.ok("User with ID " + id + " has been deleted successfully.");
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with ID " + id + " not found.");
+    @GetMapping("/get-all")
+    public ResponseEntity<List<GetUserDto>> getAllUsers() {
+        Optional<List<GetUserDto>> users = userService.getAllUsers();
+        return users.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<GetUserDto> getUserById(@PathVariable Long id) {
+        Optional<GetUserDto> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/get-by-email/{email}")
+    public ResponseEntity<GetUserDto> getUserByEmail(@PathVariable String email) {
+        Optional<GetUserDto> user = userService.getUserByEmail(email);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/get-by-role/{role}")
+    public ResponseEntity<List<GetUserDto>> getAllUsersByRole(@PathVariable UserRole role) {
+        Optional<List<GetUserDto>> users = userService.getAllUsersByRole(role);
+        return users.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/create-list")
+    public ResponseEntity<GetUserDto> createUserList(@RequestBody CreateUserDto[] createUserDto) {
+        userService.createUserList(createUserDto);
+        return ResponseEntity.ok().build();
     }
 }

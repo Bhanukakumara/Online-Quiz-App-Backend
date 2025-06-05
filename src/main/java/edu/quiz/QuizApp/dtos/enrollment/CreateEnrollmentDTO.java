@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnrollmentRequestDTO {
+public class CreateEnrollmentDTO {
     private Long studentId;
-    private Long courseId;
     private Long examId;
 }

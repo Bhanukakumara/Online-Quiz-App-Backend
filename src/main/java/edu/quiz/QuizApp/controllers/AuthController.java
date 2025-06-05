@@ -1,9 +1,10 @@
 package edu.quiz.QuizApp.controllers;
 
-import edu.quiz.QuizApp.dtos.user.CreateUserDto;
 import edu.quiz.QuizApp.dtos.JwtResponse;
 import edu.quiz.QuizApp.dtos.LoginRequest;
+import edu.quiz.QuizApp.dtos.user.GetUserDto;
 import edu.quiz.QuizApp.entites.User;
+import edu.quiz.QuizApp.enums.UserRole;
 import edu.quiz.QuizApp.repositories.UserRepository;
 import edu.quiz.QuizApp.services.JwtService;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
+@CrossOrigin
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -51,13 +53,20 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<CreateUserDto> me(){
+    public ResponseEntity<GetUserDto> me(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object email = authentication.getPrincipal();
         User user = userRepository.findByEmail(email.toString());
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(modelMapper.map(user, CreateUserDto.class));
+        return ResponseEntity.ok(modelMapper.map(user, GetUserDto.class));
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<UserRole> getRole(@RequestHeader("Authorization") String authHeader){
+        String token = authHeader.replace("Bearer ", "");
+        UserRole role = jwtService.getRoleFromToken(token);
+        return ResponseEntity.ok(role);
     }
 }

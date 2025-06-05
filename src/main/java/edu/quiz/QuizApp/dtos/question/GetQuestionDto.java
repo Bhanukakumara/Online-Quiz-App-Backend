@@ -9,14 +9,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionSummaryDto {
+public class GetQuestionDto {
     private Long id;
     private String text;
     private String option1;
     private String option2;
     private String option3;
     private String option4;
+    private int correctOption;
     private int timeToAnswer;
     private Long examId;
     private String examTitle;
+    private Long teacherId;
 }

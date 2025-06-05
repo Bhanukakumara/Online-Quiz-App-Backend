@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,16 +24,15 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id", nullable = false)
-    private User createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id", nullable = false, updatable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private Set<Exam> exams = new HashSet<>();
+    // One course can have many exams
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Exam> exams;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments = new HashSet<>();
 }
