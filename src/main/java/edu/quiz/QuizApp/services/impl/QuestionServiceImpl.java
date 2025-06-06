@@ -40,6 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
                 question.getOption4(),
                 question.getCorrectOption(),
                 question.getTimeToAnswer(),
+                question.getMarks(),
                 question.getExam().getId(),
                 question.getExam().getTitle(),
                 question.getUser().getId()

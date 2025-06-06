@@ -18,6 +18,7 @@ public class GetQuestionDto {
     private String option4;
     private int correctOption;
     private int timeToAnswer;
+    private int marks;
     private Long examId;
     private String examTitle;
     private Long teacherId;

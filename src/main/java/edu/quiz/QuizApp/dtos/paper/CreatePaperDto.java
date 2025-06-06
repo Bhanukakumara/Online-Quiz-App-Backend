@@ -19,7 +19,6 @@ import java.util.Set;
 public class CreatePaperDto {
     private Long studentId;
     private Long examId;
-    private int obtainedMarks;
     private int totalMarks;
     private Date endTime;
     private Date startTime;
