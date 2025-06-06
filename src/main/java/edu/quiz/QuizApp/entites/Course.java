@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -31,7 +29,6 @@ public class Course {
     @JoinColumn(name = "admin_id", nullable = false, updatable = false)
     private User user;
 
-    // One course can have many exams
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exam> exams;
 

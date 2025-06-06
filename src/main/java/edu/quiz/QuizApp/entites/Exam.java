@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "exams")
@@ -37,7 +35,6 @@ public class Exam {
     @JoinColumn(name = "course_id", nullable = false, updatable = false)
     private Course course;
 
-    // Many exams belong to one user (creator)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false, updatable = false)
     private User user;

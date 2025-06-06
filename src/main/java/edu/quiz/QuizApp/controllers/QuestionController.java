@@ -31,7 +31,7 @@ public class QuestionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/get-bt-id/{id}")
+    @GetMapping("/get-by-id/{id}")
     public ResponseEntity<GetQuestionDto> getQuestionById(@PathVariable long id) {
         Optional<GetQuestionDto> question = questionService.getQuestionById(id);
         return question.map(ResponseEntity::ok)

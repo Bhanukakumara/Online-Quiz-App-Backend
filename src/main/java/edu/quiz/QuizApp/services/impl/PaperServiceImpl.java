@@ -4,7 +4,6 @@ import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
 import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 import edu.quiz.QuizApp.entites.Enrollment;
 import edu.quiz.QuizApp.entites.Paper;
-import edu.quiz.QuizApp.entites.User;
 import edu.quiz.QuizApp.repositories.EnrollmentRepository;
 import edu.quiz.QuizApp.repositories.PaperRepository;
 import edu.quiz.QuizApp.services.EnrollmentService;

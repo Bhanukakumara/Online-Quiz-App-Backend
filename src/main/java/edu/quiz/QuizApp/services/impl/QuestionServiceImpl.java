@@ -11,7 +11,6 @@ import edu.quiz.QuizApp.repositories.UserRepository;
 import edu.quiz.QuizApp.services.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
