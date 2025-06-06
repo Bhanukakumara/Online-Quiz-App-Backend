@@ -66,4 +66,9 @@ public class CourseServiceImpl implements CourseService {
         });
         return Optional.of(courses);
     }
+
+    @Override
+    public Long totalCourseCount() {
+        return courseRepository.count();
+    }
 }

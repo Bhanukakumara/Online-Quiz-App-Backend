@@ -13,5 +13,9 @@ public interface UserService {
     Optional<GetUserDto> getUserById(Long id);
     Optional<GetUserDto> getUserByEmail(String email);
     Optional<List<GetUserDto>> getAllUsersByRole(UserRole role);
-    Optional<GetUserDto> createUserList(CreateUserDto[] createUserDto);
+    void createUserList(CreateUserDto[] createUserDto);
+    Long totalUsersCount();
+    Long totalAdminCount();
+    Long totalTeacherCount();
+    Long totalStudentCount();
 }

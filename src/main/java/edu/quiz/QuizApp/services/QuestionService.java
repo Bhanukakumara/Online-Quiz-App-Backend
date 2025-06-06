@@ -13,4 +13,5 @@ public interface QuestionService {
     Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId);
     Optional<List<GetQuestionDto>> getAllQuestionsByUserId(long userId);
     Optional<List<GetQuestionDto>> getQuestionPaperByExamId(long examId);
+    Long totalQuestionCount();
 }

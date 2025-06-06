@@ -83,4 +83,9 @@ public class ExamServiceImpl implements ExamService {
         examRepository.findAllByUserId(teacherId).forEach(exam -> exams.add(examToGetExamDTO(exam)));
         return Optional.of(exams);
     }
+
+    @Override
+    public Long totalExamCount() {
+        return examRepository.count();
+    }
 }

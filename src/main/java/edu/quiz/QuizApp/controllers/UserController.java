@@ -58,4 +58,24 @@ public class UserController {
         userService.createUserList(createUserDto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        return ResponseEntity.ok(userService.totalUsersCount());
+    }
+
+    @GetMapping("/total-admin-count")
+    public ResponseEntity<Long> getTotalAdminCount() {
+        return ResponseEntity.ok(userService.totalAdminCount());
+    }
+
+    @GetMapping("/total-teacher-count")
+    public ResponseEntity<Long> getTotalTeacherCount() {
+        return ResponseEntity.ok(userService.totalTeacherCount());
+    }
+
+    @GetMapping("/total-student-count")
+    public ResponseEntity<Long> getTotalStudentCount() {
+        return ResponseEntity.ok(userService.totalStudentCount());
+    }
 }

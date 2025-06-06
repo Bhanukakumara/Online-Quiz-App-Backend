@@ -58,4 +58,9 @@ public class QuestionController {
         return questions.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        return ResponseEntity.ok(questionService.totalQuestionCount());
+    }
 }

@@ -70,11 +70,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<GetUserDto> createUserList(CreateUserDto[] createUserDto) {
+    public void createUserList(CreateUserDto[] createUserDto) {
         for (CreateUserDto createUserDto1 : createUserDto) {
             createUser(createUserDto1);
             log.info("Created user: {}", createUserDto1.getUsername());
         }
-        return Optional.empty();
+    }
+
+    @Override
+    public Long totalUsersCount() {
+        return userRepository.count();
+    }
+
+    @Override
+    public Long totalAdminCount() {
+        return userRepository.countByUserRole("ADMIN");
+    }
+
+    @Override
+    public Long totalTeacherCount() {
+        return userRepository.countByUserRole("TEACHER");
+    }
+
+    @Override
+    public Long totalStudentCount() {
+        return userRepository.countByUserRole("STUDENT");
     }
 }

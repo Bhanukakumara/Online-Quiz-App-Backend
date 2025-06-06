@@ -11,4 +11,5 @@ public interface CourseService {
     Optional<List<GetCourseDto>> getAllCourses();
     Optional<GetCourseDto> getCourseById(long id);
     Optional<List<GetCourseDto>> getAllCoursesByUserId(long userId);
+    Long totalCourseCount();
 }

@@ -116,4 +116,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         return Optional.of(randomQuestionList);
     }
+
+    @Override
+    public Long totalQuestionCount() {
+        return questionRepository.count();
+    }
 }
