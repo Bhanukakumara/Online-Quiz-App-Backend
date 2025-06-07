@@ -1,6 +1,7 @@
 package edu.quiz.QuizApp.services.impl;
 
 import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
+import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 import edu.quiz.QuizApp.entites.Enrollment;
 import edu.quiz.QuizApp.entites.Paper;
@@ -133,5 +134,27 @@ public class PaperServiceImpl implements PaperService {
         data.put("timestamp", System.currentTimeMillis());
 
         return data;
+    }
+
+    @Override
+    public List<GetPaperDto> getAllPapers() {
+        List<Paper> allPaperList = paperRepository.findAll();
+        List<GetPaperDto> paperDtoList = new ArrayList<>();
+        allPaperList.forEach(paper -> {
+            GetPaperDto getPaperDto = new GetPaperDto();
+            getPaperDto.setId(paper.getId());
+            Enrollment enrollment = paper.getEnrollment();
+            getPaperDto.setStudentName(enrollment.getStudent().getName());
+            getPaperDto.setExamName(enrollment.getExam().getTitle());
+            getPaperDto.setCourseName(enrollment.getExam().getCourse().getName());
+            getPaperDto.setAttemptNumber(paper.getAttemptNumber());
+            getPaperDto.setObtainedMarks(paper.getObtainedMarks());
+            getPaperDto.setTotalMarks(paper.getTotalMarks());
+            getPaperDto.setStartTime(paper.getStartTime());
+            getPaperDto.setEntTime(paper.getEndTime());
+            getPaperDto.setStudentAnswer(paper.getStudentAnswers());
+            paperDtoList.add(getPaperDto);
+        });
+        return paperDtoList;
     }
 }

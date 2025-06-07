@@ -1,6 +1,7 @@
 package edu.quiz.QuizApp.controllers;
 
 import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
+import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 import edu.quiz.QuizApp.services.PaperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,10 @@ public class PaperController {
     public ResponseEntity<Map<String, Object>> getLiveSubmissions() {
         Map<String, Object> data = paperService.getLiveSubmissionData();
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/get-all-answer")
+    public ResponseEntity<List<GetPaperDto>> getAllAnswer() {
+        return ResponseEntity.ok(paperService.getAllPapers());
     }
 }

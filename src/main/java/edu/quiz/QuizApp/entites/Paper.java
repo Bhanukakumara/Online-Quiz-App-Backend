@@ -50,6 +50,7 @@ public class Paper {
     @AllArgsConstructor
     public static class StudentAnswer {
         private Long questionId;
+        private int correctAnswer;
         private Integer givenAnswer;
     }
 }
