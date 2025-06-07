@@ -5,6 +5,7 @@ import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
 import edu.quiz.QuizApp.entites.Enrollment;
 import edu.quiz.QuizApp.entites.Paper;
+import edu.quiz.QuizApp.entites.User;
 import edu.quiz.QuizApp.repositories.EnrollmentRepository;
 import edu.quiz.QuizApp.repositories.PaperRepository;
 import edu.quiz.QuizApp.services.EnrollmentService;
@@ -145,16 +146,37 @@ public class PaperServiceImpl implements PaperService {
             getPaperDto.setId(paper.getId());
             Enrollment enrollment = paper.getEnrollment();
             getPaperDto.setStudentName(enrollment.getStudent().getName());
-            getPaperDto.setExamName(enrollment.getExam().getTitle());
-            getPaperDto.setCourseName(enrollment.getExam().getCourse().getName());
-            getPaperDto.setAttemptNumber(paper.getAttemptNumber());
-            getPaperDto.setObtainedMarks(paper.getObtainedMarks());
-            getPaperDto.setTotalMarks(paper.getTotalMarks());
-            getPaperDto.setStartTime(paper.getStartTime());
-            getPaperDto.setEntTime(paper.getEndTime());
-            getPaperDto.setStudentAnswer(paper.getStudentAnswers());
-            paperDtoList.add(getPaperDto);
+            getExamName(paperDtoList, paper, enrollment, getPaperDto);
         });
         return paperDtoList;
+    }
+
+    @Override
+    public List<GetPaperDto> getAllPaperByStudentId(Long studentId) {
+        List<Paper> paperList = paperRepository.findAll();
+        List<GetPaperDto> paperDtoList = new ArrayList<>();
+        paperList.forEach(paper -> {
+            Enrollment enrollment = paper.getEnrollment();
+            User student = enrollment.getStudent();
+            if (student.getId().equals(studentId)) {
+                GetPaperDto getPaperDto = new GetPaperDto();
+                getPaperDto.setId(paper.getId());
+                getPaperDto.setStudentName(student.getName());
+                getExamName(paperDtoList, paper, enrollment, getPaperDto);
+            }
+        });
+        return paperDtoList;
+    }
+
+    private void getExamName(List<GetPaperDto> paperDtoList, Paper paper, Enrollment enrollment, GetPaperDto getPaperDto) {
+        getPaperDto.setExamName(enrollment.getExam().getTitle());
+        getPaperDto.setCourseName(enrollment.getExam().getCourse().getName());
+        getPaperDto.setAttemptNumber(paper.getAttemptNumber());
+        getPaperDto.setObtainedMarks(paper.getObtainedMarks());
+        getPaperDto.setTotalMarks(paper.getTotalMarks());
+        getPaperDto.setStartTime(paper.getStartTime());
+        getPaperDto.setEntTime(paper.getEndTime());
+        getPaperDto.setStudentAnswer(paper.getStudentAnswers());
+        paperDtoList.add(getPaperDto);
     }
 }

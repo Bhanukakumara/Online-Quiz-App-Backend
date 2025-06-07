@@ -38,4 +38,9 @@ public class PaperController {
     public ResponseEntity<List<GetPaperDto>> getAllAnswer() {
         return ResponseEntity.ok(paperService.getAllPapers());
     }
+
+    @GetMapping("/get-all-answer-by-student-id/{studentId}")
+    public ResponseEntity<List<GetPaperDto>> getAllAnswerByStudentId(@PathVariable Long studentId) {
+        return ResponseEntity.ok(paperService.getAllPaperByStudentId(studentId));
+    }
 }

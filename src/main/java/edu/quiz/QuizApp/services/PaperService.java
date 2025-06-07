@@ -11,4 +11,5 @@ public interface PaperService {
     List<Map<String, Object>> getSubmissionsByMinute(int minutes);
     Map<String, Object> getLiveSubmissionData();
     List<GetPaperDto> getAllPapers();
+    List<GetPaperDto> getAllPaperByStudentId(Long studentId);
 }
