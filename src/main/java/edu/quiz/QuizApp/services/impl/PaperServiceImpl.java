@@ -191,6 +191,8 @@ public class PaperServiceImpl implements PaperService {
             int givenAnswer = studentAnswer.getGivenAnswer();
             createList(givenAnswerList, questionId, givenAnswer);
             aiRequestDto.setGivenAnswer(givenAnswerList);
+            aiRequestDto.setObtainedMarks(getPaperDtoLast.getObtainedMarks());
+            aiRequestDto.setTotalMarks(getPaperDtoLast.getTotalMarks());
         });
         return aiRequestDto;
     }

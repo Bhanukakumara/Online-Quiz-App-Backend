@@ -16,4 +16,6 @@ public class AiRequestDto {
     private List<String> questions;
     private List<String> correctAnswer;
     private List<String> givenAnswer;
+    private Integer obtainedMarks;
+    private Integer totalMarks;
 }
