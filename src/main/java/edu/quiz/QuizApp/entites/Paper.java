@@ -51,6 +51,6 @@ public class Paper {
     public static class StudentAnswer {
         private Long questionId;
         private int correctAnswer;
-        private Integer givenAnswer;
+        private int givenAnswer;
     }
 }

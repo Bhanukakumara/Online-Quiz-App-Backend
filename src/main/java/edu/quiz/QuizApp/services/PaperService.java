@@ -1,5 +1,6 @@
 package edu.quiz.QuizApp.services;
 
+import edu.quiz.QuizApp.dtos.paper.AiRequestDto;
 import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
 import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 
@@ -12,4 +13,5 @@ public interface PaperService {
     Map<String, Object> getLiveSubmissionData();
     List<GetPaperDto> getAllPapers();
     List<GetPaperDto> getAllPaperByStudentId(Long studentId);
+    AiRequestDto getAiRequest(Long studentId);
 }

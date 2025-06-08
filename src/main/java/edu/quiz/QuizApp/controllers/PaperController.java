@@ -1,5 +1,6 @@
 package edu.quiz.QuizApp.controllers;
 
+import edu.quiz.QuizApp.dtos.paper.AiRequestDto;
 import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
 import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 import edu.quiz.QuizApp.services.PaperService;
@@ -42,5 +43,10 @@ public class PaperController {
     @GetMapping("/get-all-answer-by-student-id/{studentId}")
     public ResponseEntity<List<GetPaperDto>> getAllAnswerByStudentId(@PathVariable Long studentId) {
         return ResponseEntity.ok(paperService.getAllPaperByStudentId(studentId));
+    }
+
+    @GetMapping("/get-ai-request/{studentId}")
+    public ResponseEntity<AiRequestDto> getAiRequest(@PathVariable Long studentId) {
+        return ResponseEntity.ok(paperService.getAiRequest(studentId));
     }
 }

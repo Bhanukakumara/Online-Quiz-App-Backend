@@ -1,5 +1,6 @@
 package edu.quiz.QuizApp.services.impl;
 
+import edu.quiz.QuizApp.dtos.paper.AiRequestDto;
 import edu.quiz.QuizApp.dtos.paper.CreatePaperDto;
 import edu.quiz.QuizApp.dtos.paper.GetPaperDto;
 import edu.quiz.QuizApp.dtos.question.GetQuestionDto;
@@ -166,6 +167,51 @@ public class PaperServiceImpl implements PaperService {
             }
         });
         return paperDtoList;
+    }
+
+    @Override
+    public AiRequestDto getAiRequest(Long studentId) {
+        List<GetPaperDto> allPaperByStudentId = getAllPaperByStudentId(studentId);
+        List<String> questionList = new ArrayList<>();
+        List<String> correctAnswerList = new ArrayList<>();
+        List<String> givenAnswerList = new ArrayList<>();
+        GetPaperDto getPaperDtoLast = allPaperByStudentId.getLast();
+        AiRequestDto aiRequestDto = new AiRequestDto();
+        aiRequestDto.setStudentName(getPaperDtoLast.getStudentName());
+        List<Paper.StudentAnswer> studentAnswers = getPaperDtoLast.getStudentAnswer();
+        studentAnswers.forEach(studentAnswer -> {
+            Long questionId = studentAnswer.getQuestionId();
+            if(questionService.getQuestionById(questionId).isPresent()){
+                questionList.add(questionService.getQuestionById(questionId).get().getText());
+            }
+            aiRequestDto.setQuestions(questionList);
+            int correctAnswer = studentAnswer.getCorrectAnswer();
+            createList(correctAnswerList, questionId, correctAnswer);
+            aiRequestDto.setCorrectAnswer(correctAnswerList);
+            int givenAnswer = studentAnswer.getGivenAnswer();
+            createList(givenAnswerList, questionId, givenAnswer);
+            aiRequestDto.setGivenAnswer(givenAnswerList);
+        });
+        return aiRequestDto;
+    }
+
+    private void createList(List<String> givenAnswerList, Long questionId, int givenAnswer) {
+        Optional<GetQuestionDto> questionById = questionService.getQuestionById(questionId);
+        if (questionById.isPresent()) {
+            if (givenAnswer == 1) {
+                givenAnswerList.add(questionById.get().getOption1());
+            }
+            else if (givenAnswer == 2) {
+                givenAnswerList.add(questionById.get().getOption2());
+            }
+            else if (givenAnswer == 3) {
+                givenAnswerList.add(questionById.get().getOption3());
+            }
+            else if (givenAnswer == 4) {
+                givenAnswerList.add(questionById.get().getOption4());
+            }
+        }
+
     }
 
     private void getExamName(List<GetPaperDto> paperDtoList, Paper paper, Enrollment enrollment, GetPaperDto getPaperDto) {
