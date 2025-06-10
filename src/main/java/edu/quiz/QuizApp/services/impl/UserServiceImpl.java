@@ -70,6 +70,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean deleteUser(Long id) {
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void createUserList(CreateUserDto[] createUserDto) {
         for (CreateUserDto createUserDto1 : createUserDto) {
             createUser(createUserDto1);

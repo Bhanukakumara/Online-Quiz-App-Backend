@@ -63,4 +63,12 @@ public class QuestionController {
     public ResponseEntity<Long> getTotalCount() {
         return ResponseEntity.ok(questionService.totalQuestionCount());
     }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Boolean> deleteQuestion(@PathVariable long id) {
+        if (questionService.deleteQuestion(id)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.badRequest().build();
+    }
 }
