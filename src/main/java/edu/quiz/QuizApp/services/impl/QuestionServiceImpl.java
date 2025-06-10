@@ -82,6 +82,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Boolean deleteQuestion(long id) {
+        if (questionRepository.existsById(id)) {
+            questionRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId) {
         List<GetQuestionDto> questions = new ArrayList<>();
         questionRepository.findAllByExamId(examId).forEach(question -> questions.add(questionToGetQuestionDto(question)));
