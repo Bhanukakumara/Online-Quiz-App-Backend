@@ -1,5 +1,6 @@
 package edu.quiz.QuizApp.entites;
 
+import edu.quiz.QuizApp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +33,8 @@ public class User {
     private String email;
 
     @Column(name = "role", nullable = false)
-    private String userRole;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Course> courses;
