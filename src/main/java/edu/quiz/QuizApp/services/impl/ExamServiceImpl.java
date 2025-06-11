@@ -88,4 +88,15 @@ public class ExamServiceImpl implements ExamService {
     public Long totalExamCount() {
         return examRepository.count();
     }
+
+    @Override
+    public Optional<GetExamDTO> updateExam(Long id, CreateExamDTO createExamDTO) {
+        return examRepository.findById(id).map(exam -> {
+            exam.setTitle(createExamDTO.getTitle());
+            exam.setDescription(createExamDTO.getDescription());
+            exam.setQuestionCount(createExamDTO.getQuestionCount());
+            exam.setMaxAttempts(createExamDTO.getMaxAttempts());
+            return examToGetExamDTO(examRepository.save(exam));
+        });
+    }
 }
