@@ -29,13 +29,13 @@ public class UserController {
     public ResponseEntity<GetUserDto> updateUserById(@PathVariable Long id, @RequestBody UpdateUserDto dto){
         Optional<GetUserDto> getUserDto = userService.updateUserById(id, dto);
         return getUserDto
-                .map(userDto -> ResponseEntity.ok(userDto)) // If present, return 200 OK with body
+                .map(ResponseEntity::ok) // If present, return 200 OK with body
                 .orElseGet(() -> ResponseEntity.notFound().build()); // If empty, return 404 Not Found
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
-        return  ResponseEntity.ok().body("Deleted Sucessfully");
+        return ResponseEntity.ok(true);
     }
 
 

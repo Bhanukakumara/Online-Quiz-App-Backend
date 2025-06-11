@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-
     List<User> findByUserRole(UserRole userRole);
-
     Long countByUserRole(UserRole userRole);
 }

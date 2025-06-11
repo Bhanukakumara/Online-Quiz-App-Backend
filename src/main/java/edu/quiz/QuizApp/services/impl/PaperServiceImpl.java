@@ -48,8 +48,8 @@ public class PaperServiceImpl implements PaperService {
             if (questionById.isPresent()) {
                 GetQuestionDto getQuestionDto = questionById.get();
                 int correctOption = getQuestionDto.getCorrectOption();
-                Integer givenAnswer = studentAnswer.getGivenAnswer();
-                if (givenAnswer != null && correctOption == givenAnswer) {
+                int givenAnswer = studentAnswer.getGivenAnswer();
+                if (correctOption == givenAnswer) {
                     obtainedMarks += getQuestionDto.getMarks();
                 }
             }

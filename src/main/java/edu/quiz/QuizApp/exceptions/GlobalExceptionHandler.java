@@ -1,6 +1,6 @@
 package edu.quiz.QuizApp.exceptions;
 
-import edu.quiz.QuizApp.dtos.CustomException;
+import edu.quiz.QuizApp.dtos.CustomError;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<CustomException> handleUserNotFoundException(UserNotFoundException ex){
-        return ResponseEntity.badRequest().body(CustomException.builder().massege(ex.getMessage()).code(HttpStatus.NOT_FOUND.value()).build());
+    public ResponseEntity<CustomError> handleUserNotFoundException(UserNotFoundException ex){
+        return ResponseEntity.badRequest().body(CustomError.builder().massage(ex.getMessage()).code(HttpStatus.NOT_FOUND.value()).build());
     }
 
     //Generic Exception Handler
