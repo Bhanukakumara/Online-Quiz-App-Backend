@@ -13,4 +13,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomException> handleUserNotFoundException(UserNotFoundException ex){
         return ResponseEntity.badRequest().body(CustomException.builder().massege(ex.getMessage()).code(HttpStatus.NOT_FOUND.value()).build());
     }
+
+    //Generic Exception Handler
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+        // Handle unexpected exceptions
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An unexpected error occurred: " + ex.getMessage());
+    }
+
 }

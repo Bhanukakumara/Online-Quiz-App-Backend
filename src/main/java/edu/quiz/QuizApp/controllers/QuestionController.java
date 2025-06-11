@@ -71,4 +71,10 @@ public class QuestionController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/update/{questionId}")
+    public ResponseEntity<GetQuestionDto> updateQuestion(@PathVariable Long questionId, @RequestBody CreateQuestionDto createQuestionDto ){
+        questionService.updateQuestionById(questionId, createQuestionDto);
+        return ResponseEntity.ok().build();
+    }
 }
