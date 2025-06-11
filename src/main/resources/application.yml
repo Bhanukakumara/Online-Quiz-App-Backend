@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/quiz_app_new?createDatabaseIfNotExist=true
     username: root
-    password: dinneth123
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: update
