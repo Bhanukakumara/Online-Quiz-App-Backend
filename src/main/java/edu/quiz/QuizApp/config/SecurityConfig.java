@@ -62,7 +62,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/question/create").hasAnyRole(UserRole.ADMIN.name(), UserRole.TEACHER.name())
                         .requestMatchers(HttpMethod.POST, "/api/auth/enrollment/create").hasRole(UserRole.STUDENT.name())
                         .requestMatchers(HttpMethod.POST, "/api/auth/paper/save").hasRole(UserRole.STUDENT.name())
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

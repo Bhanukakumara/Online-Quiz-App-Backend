@@ -32,6 +32,11 @@ public class UserController {
                 .map(userDto -> ResponseEntity.ok(userDto)) // If present, return 200 OK with body
                 .orElseGet(() -> ResponseEntity.notFound().build()); // If empty, return 404 Not Found
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+        return  ResponseEntity.ok().body("Deleted Sucessfully");
+    }
 
 
     @GetMapping("/get-all")
