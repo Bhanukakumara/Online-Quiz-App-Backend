@@ -2,6 +2,7 @@ package edu.quiz.QuizApp.services;
 
 import edu.quiz.QuizApp.dtos.user.CreateUserDto;
 import edu.quiz.QuizApp.dtos.user.GetUserDto;
+import edu.quiz.QuizApp.dtos.user.UpdateUserDto;
 import edu.quiz.QuizApp.enums.UserRole;
 
 import java.util.List;
@@ -13,5 +14,11 @@ public interface UserService {
     Optional<GetUserDto> getUserById(Long id);
     Optional<GetUserDto> getUserByEmail(String email);
     Optional<List<GetUserDto>> getAllUsersByRole(UserRole role);
-    Optional<GetUserDto> createUserList(CreateUserDto[] createUserDto);
+    Optional<GetUserDto> updateUserById(long id, UpdateUserDto dto);
+    Boolean deleteUser(Long id);
+    void createUserList(CreateUserDto[] createUserDto);
+    Long totalUsersCount();
+    Long totalAdminCount();
+    Long totalTeacherCount();
+    Long totalStudentCount();
 }

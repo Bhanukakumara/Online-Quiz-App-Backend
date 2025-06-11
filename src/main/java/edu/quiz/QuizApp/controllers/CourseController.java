@@ -44,4 +44,9 @@ public class CourseController {
         return courses.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        return ResponseEntity.ok(courseService.totalCourseCount());
+    }
 }

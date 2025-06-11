@@ -31,7 +31,7 @@ public class QuestionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/get-bt-id/{id}")
+    @GetMapping("/get-by-id/{id}")
     public ResponseEntity<GetQuestionDto> getQuestionById(@PathVariable long id) {
         Optional<GetQuestionDto> question = questionService.getQuestionById(id);
         return question.map(ResponseEntity::ok)
@@ -57,5 +57,18 @@ public class QuestionController {
         Optional<List<GetQuestionDto>> questions = questionService.getQuestionPaperByExamId(examId);
         return questions.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        return ResponseEntity.ok(questionService.totalQuestionCount());
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Boolean> deleteQuestion(@PathVariable long id) {
+        if (questionService.deleteQuestion(id)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

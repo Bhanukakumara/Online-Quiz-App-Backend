@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -50,5 +47,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         enrollment.setExam(exam);
         enrollment.setStudent(user);
         return Optional.of(enrollmentToGetEnrollmentDto(enrollmentRepository.save(enrollment)));
+    }
+
+    @Override
+    public Enrollment getLastEnrollmentID(Long studentId, Long examId) {
+            return enrollmentRepository.findTopByStudentIdAndExamIdOrderByIdDesc(studentId, examId).orElse(null);
     }
 }

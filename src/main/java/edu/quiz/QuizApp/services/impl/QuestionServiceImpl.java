@@ -11,7 +11,6 @@ import edu.quiz.QuizApp.repositories.UserRepository;
 import edu.quiz.QuizApp.services.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +39,7 @@ public class QuestionServiceImpl implements QuestionService {
                 question.getOption4(),
                 question.getCorrectOption(),
                 question.getTimeToAnswer(),
+                question.getMarks(),
                 question.getExam().getId(),
                 question.getExam().getTitle(),
                 question.getUser().getId()
@@ -82,6 +82,15 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Boolean deleteQuestion(long id) {
+        if (questionRepository.existsById(id)) {
+            questionRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId) {
         List<GetQuestionDto> questions = new ArrayList<>();
         questionRepository.findAllByExamId(examId).forEach(question -> questions.add(questionToGetQuestionDto(question)));
@@ -115,5 +124,10 @@ public class QuestionServiceImpl implements QuestionService {
                 .collect(Collectors.toList());
 
         return Optional.of(randomQuestionList);
+    }
+
+    @Override
+    public Long totalQuestionCount() {
+        return questionRepository.count();
     }
 }

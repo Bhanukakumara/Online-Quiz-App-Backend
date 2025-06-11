@@ -52,4 +52,8 @@ public class ExamController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        return ResponseEntity.ok(examService.totalExamCount());
+    }
 }

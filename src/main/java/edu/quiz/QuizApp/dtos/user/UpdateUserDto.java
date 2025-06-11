@@ -1,17 +1,13 @@
 package edu.quiz.QuizApp.dtos.user;
 
 import edu.quiz.QuizApp.enums.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class CreateUserDto {
+@Data
+public class UpdateUserDto {
     private String username;
     private String password;
     private String name;
     private String email;
-    private UserRole role;
+    private String role;
 }

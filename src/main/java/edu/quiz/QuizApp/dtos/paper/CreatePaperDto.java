@@ -1,27 +1,26 @@
 package edu.quiz.QuizApp.dtos.paper;
 
 import edu.quiz.QuizApp.dtos.paper_question.PaperQuestionDTO;
+import edu.quiz.QuizApp.entites.Paper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaperDTO {
-    private Long id;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Double totalMarks;
-    private Double obtainedMarks;
-    private Integer attemptNumber;
+public class CreatePaperDto {
     private Long studentId;
     private Long examId;
-    private Long enrollmentId;
-    private Set<PaperQuestionDTO> paperQuestions;
+    private int totalMarks;
+    private Date endTime;
+    private Date startTime;
+    private List<Paper.StudentAnswer> studentAnswers;
 }

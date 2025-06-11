@@ -1,15 +1,12 @@
 package edu.quiz.QuizApp.entites;
 
-import edu.quiz.QuizApp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -37,11 +34,9 @@ public class User {
     @Column(name = "role", nullable = false)
     private String userRole;
 
-    // One user can create many courses
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Course> courses;
 
-    // One user can create many exams
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exam> exams;
 

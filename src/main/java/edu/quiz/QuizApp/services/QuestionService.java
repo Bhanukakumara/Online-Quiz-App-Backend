@@ -10,7 +10,9 @@ public interface QuestionService {
     Optional<GetQuestionDto> createQuestion(CreateQuestionDto createQuestionDto);
     Optional<List<GetQuestionDto>> getAllQuestions();
     Optional<GetQuestionDto> getQuestionById(long id);
+    Boolean deleteQuestion(long id);
     Optional<List<GetQuestionDto>> getAllQuestionByExamId(long examId);
     Optional<List<GetQuestionDto>> getAllQuestionsByUserId(long userId);
     Optional<List<GetQuestionDto>> getQuestionPaperByExamId(long examId);
+    Long totalQuestionCount();
 }
