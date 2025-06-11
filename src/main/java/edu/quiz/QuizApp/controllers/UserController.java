@@ -2,6 +2,7 @@ package edu.quiz.QuizApp.controllers;
 
 import edu.quiz.QuizApp.dtos.user.CreateUserDto;
 import edu.quiz.QuizApp.dtos.user.GetUserDto;
+import edu.quiz.QuizApp.dtos.user.UpdateUserDto;
 import edu.quiz.QuizApp.enums.UserRole;
 import edu.quiz.QuizApp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,14 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+    @PutMapping("/update-by-id/{id}")
+    public ResponseEntity<GetUserDto> updateUserById(@PathVariable Long id, @RequestBody UpdateUserDto dto){
+        Optional<GetUserDto> getUserDto = userService.updateUserById(id, dto);
+        return getUserDto
+                .map(userDto -> ResponseEntity.ok(userDto)) // If present, return 200 OK with body
+                .orElseGet(() -> ResponseEntity.notFound().build()); // If empty, return 404 Not Found
+    }
+
 
     @GetMapping("/get-all")
     public ResponseEntity<List<GetUserDto>> getAllUsers() {

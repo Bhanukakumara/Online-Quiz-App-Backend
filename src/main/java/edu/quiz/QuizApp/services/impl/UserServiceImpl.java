@@ -2,8 +2,10 @@ package edu.quiz.QuizApp.services.impl;
 
 import edu.quiz.QuizApp.dtos.user.CreateUserDto;
 import edu.quiz.QuizApp.dtos.user.GetUserDto;
+import edu.quiz.QuizApp.dtos.user.UpdateUserDto;
 import edu.quiz.QuizApp.entites.*;
 import edu.quiz.QuizApp.enums.UserRole;
+import edu.quiz.QuizApp.exceptions.UserNotFoundException;
 import edu.quiz.QuizApp.repositories.UserRepository;
 import edu.quiz.QuizApp.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -70,8 +72,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<GetUserDto> updateUserById(long id) {
-        return Optional.empty();
+    public Optional<GetUserDto> updateUserById(long id, UpdateUserDto updateUserDto) {
+       User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User Doesnt Exist"));
+        user.setName(updateUserDto.getName()!=null? updateUserDto.getName() : user.getName());
+        user.setEmail(updateUserDto.getEmail()!=null? updateUserDto.getEmail() : user.getEmail());
+        //USer Role Taken as String
+        user.setUserRole(updateUserDto.getRole()!=null? updateUserDto.getRole() : user.getUserRole());
+        user.setUsername(updateUserDto.getUsername()!=null? updateUserDto.getUsername() : user.getUsername());
+        user.setPassword(updateUserDto.getPassword()!=null? updateUserDto.getPassword() : user.getPassword());
+        User updatedUser = userRepository.save(user);
+        return Optional.of(userToGetUserDto(updatedUser));
     }
 
     @Override
