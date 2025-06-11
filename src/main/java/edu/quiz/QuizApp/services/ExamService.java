@@ -13,5 +13,6 @@ public interface ExamService {
     Optional<List<GetExamDTO>> getExamByCourseId(Long courseId);
     Optional<List<GetExamDTO>> getExamByTeacherId(Long teacherId);
     Long totalExamCount();
+    Optional<GetExamDTO> updateExam(Long id, CreateExamDTO createExamDTO);
 
 }
