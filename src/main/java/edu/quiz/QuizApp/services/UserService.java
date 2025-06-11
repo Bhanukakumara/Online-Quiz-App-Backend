@@ -13,6 +13,7 @@ public interface UserService {
     Optional<GetUserDto> getUserById(Long id);
     Optional<GetUserDto> getUserByEmail(String email);
     Optional<List<GetUserDto>> getAllUsersByRole(UserRole role);
+    Optional<GetUserDto> updateUserById(long id);
     Boolean deleteUser(Long id);
     void createUserList(CreateUserDto[] createUserDto);
     Long totalUsersCount();

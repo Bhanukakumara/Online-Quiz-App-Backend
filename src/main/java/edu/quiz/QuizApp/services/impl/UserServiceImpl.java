@@ -70,6 +70,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<GetUserDto> updateUserById(long id) {
+        return Optional.empty();
+    }
+
+    @Override
     public Boolean deleteUser(Long id) {
         if (userRepository.findById(id).isPresent()) {
             userRepository.deleteById(id);
