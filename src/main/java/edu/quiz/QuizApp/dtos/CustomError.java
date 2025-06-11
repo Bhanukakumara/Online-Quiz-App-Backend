@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CustomException {
-    private String massege;
+public class CustomError {
+    private String massage;
     private Integer code;
 }
