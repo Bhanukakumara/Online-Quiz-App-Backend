@@ -116,9 +116,9 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public Boolean deleteQuestion(long id) {
-        if (questionRepository.existsById(id)) {
-            questionRepository.deleteById(id);
+    public Boolean deleteQuestion(long questionId) {
+        if (questionRepository.existsById(questionId)) {
+            questionRepository.deleteById(questionId);
             return true;
         }
         return false;
