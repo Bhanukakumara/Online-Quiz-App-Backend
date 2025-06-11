@@ -56,14 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private static Question getQuestion(CreateQuestionDto createQuestionDto, Exam exam, User user) {
         Question question = new Question();
-        question.setText(createQuestionDto.getText());
-        question.setOption1(createQuestionDto.getOption1());
-        question.setOption2(createQuestionDto.getOption2());
-        question.setOption3(createQuestionDto.getOption3());
-        question.setOption4(createQuestionDto.getOption4());
-        question.setCorrectOption(createQuestionDto.getCorrectOption());
-        question.setTimeToAnswer(createQuestionDto.getTimeToAnswer());
-        question.setMarks(createQuestionDto.getMarks());
+        createQuestion(createQuestionDto, question);
         question.setExam(exam);
         question.setUser(user);
         return question;
@@ -80,6 +73,47 @@ public class QuestionServiceImpl implements QuestionService {
     public Optional<GetQuestionDto> getQuestionById(long id) {
         return questionRepository.findById(id).map(this::questionToGetQuestionDto);
     }
+
+    @Override
+    public Optional<GetQuestionDto> updateQuestionById(long id, CreateQuestionDto createQuestionDto) {
+        // Fetch the existing question by ID
+        Optional<Question> existingQuestionOpt = questionRepository.findById(id);
+
+        if (existingQuestionOpt.isPresent()) {
+            Question existingQuestion = existingQuestionOpt.get();
+
+            // Update the fields
+            createQuestion(createQuestionDto, existingQuestion);
+
+            // Update associated Exam if valid
+            Optional<Exam> examOpt = examRepository.findById(createQuestionDto.getExamId());
+            if (examOpt.isPresent()) {
+                existingQuestion.setExam(examOpt.get());
+            } else {
+                // Handle invalid exam ID - optionally throw a custom exception or log
+                return Optional.empty();
+            }
+
+            // Save and return DTO
+            Question updatedQuestion = questionRepository.save(existingQuestion);
+            return Optional.of(questionToGetQuestionDto(updatedQuestion));
+        }
+
+        // Question with the given ID not found
+        return Optional.empty();
+    }
+
+    private static void createQuestion(CreateQuestionDto createQuestionDto, Question existingQuestion) {
+        existingQuestion.setText(createQuestionDto.getText());
+        existingQuestion.setOption1(createQuestionDto.getOption1());
+        existingQuestion.setOption2(createQuestionDto.getOption2());
+        existingQuestion.setOption3(createQuestionDto.getOption3());
+        existingQuestion.setOption4(createQuestionDto.getOption4());
+        existingQuestion.setCorrectOption(createQuestionDto.getCorrectOption());
+        existingQuestion.setTimeToAnswer(createQuestionDto.getTimeToAnswer());
+        existingQuestion.setMarks(createQuestionDto.getMarks());
+    }
+
 
     @Override
     public Boolean deleteQuestion(long id) {
