@@ -1,5 +1,6 @@
 package edu.quiz.QuizApp.dtos.user;
 
+import edu.quiz.QuizApp.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,5 @@ public class GetUserDto {
     private String username;
     private String name;
     private String email;
-    private String role;
+    private UserRole role;
 }

@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<List<GetUserDto>> getAllUsersByRole(UserRole role) {
         List<GetUserDto> users = new ArrayList<>();
-        userRepository.findByUserRole(role.toString()).forEach(user -> users.add(userToGetUserDto(user)));
+        userRepository.findByUserRole(role).forEach(user -> users.add(userToGetUserDto(user)));
         return Optional.of(users);
     }
 
@@ -98,16 +98,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long totalAdminCount() {
-        return userRepository.countByUserRole("ADMIN");
+        return userRepository.countByUserRole(UserRole.ADMIN);
     }
 
     @Override
     public Long totalTeacherCount() {
-        return userRepository.countByUserRole("TEACHER");
+        return userRepository.countByUserRole(UserRole.TEACHER);
     }
 
     @Override
     public Long totalStudentCount() {
-        return userRepository.countByUserRole("STUDENT");
+        return userRepository.countByUserRole(UserRole.STUDENT);
     }
 }
