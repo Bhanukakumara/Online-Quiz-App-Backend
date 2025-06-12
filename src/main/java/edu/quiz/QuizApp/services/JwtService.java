@@ -32,7 +32,7 @@ public class JwtService {
             Claims claims = getClaims(token);
             return claims.getExpiration().after(new Date());
         }
-        catch (JwtException ex){
+        catch (JwtException _){
             return false;
         }
     }

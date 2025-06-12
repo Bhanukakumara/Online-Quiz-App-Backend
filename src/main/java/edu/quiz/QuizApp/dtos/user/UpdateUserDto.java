@@ -1,6 +1,5 @@
 package edu.quiz.QuizApp.dtos.user;
 
-import edu.quiz.QuizApp.enums.UserRole;
 import lombok.Data;
 
 @Data

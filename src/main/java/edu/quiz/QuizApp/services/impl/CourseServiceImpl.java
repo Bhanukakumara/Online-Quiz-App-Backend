@@ -47,9 +47,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<List<GetCourseDto>> getAllCourses() {
         List<GetCourseDto> courses = new ArrayList<>();
-        courseRepository.findAll().forEach(course -> {
-            courses.add(courseToGetCourseDto(course));
-        });
+        courseRepository.findAll().forEach(course -> courses.add(courseToGetCourseDto(course)));
         return Optional.of(courses);
     }
 
@@ -61,9 +59,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<List<GetCourseDto>> getAllCoursesByUserId(long userId) {
         List<GetCourseDto> courses = new ArrayList<>();
-        courseRepository.findByUserId(userId).forEach(course -> {
-            courses.add(courseToGetCourseDto(course));
-        });
+        courseRepository.findByUserId(userId).forEach(course -> courses.add(courseToGetCourseDto(course)));
         return Optional.of(courses);
     }
 

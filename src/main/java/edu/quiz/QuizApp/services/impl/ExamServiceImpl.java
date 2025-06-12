@@ -59,9 +59,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Optional<List<GetExamDTO>> getAllExams() {
         List<GetExamDTO> exams = new ArrayList<>();
-        examRepository.findAll().forEach(exam -> {
-            exams.add(examToGetExamDTO(exam));
-        });
+        examRepository.findAll().forEach(exam -> exams.add(examToGetExamDTO(exam)));
         return Optional.of(exams);
     }
 
