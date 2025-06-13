@@ -82,9 +82,10 @@ public class CourseServiceImpl implements CourseService {
     course.setDescription(updateCourseDto.getDescription());
     course.setUser(admin);
 
-    Course updatedCourse = courseRepository.save(course);
+    courseRepository.save(course);
 
-    return Optional.of(courseToGetCourseDto(updatedCourse));
+    return getCourseById(course.getId());
+
     }
 
     @Override
