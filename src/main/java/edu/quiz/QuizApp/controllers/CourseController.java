@@ -1,7 +1,9 @@
 package edu.quiz.QuizApp.controllers;
 
+import edu.quiz.QuizApp.ResourceNotFoundException;
 import edu.quiz.QuizApp.dtos.course.CreateCourseDto;
 import edu.quiz.QuizApp.dtos.course.GetCourseDto;
+import edu.quiz.QuizApp.dtos.course.UpdateCourseDto;
 import edu.quiz.QuizApp.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +50,22 @@ public class CourseController {
     @GetMapping("/total-count")
     public ResponseEntity<Long> getTotalCount() {
         return ResponseEntity.ok(courseService.totalCourseCount());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<GetCourseDto>updateCourse(@RequestBody UpdateCourseDto updateCourseDto){
+        Optional<GetCourseDto>updatedCourse =courseService.updateCourse(updateCourseDto);
+        return updatedCourse.map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.badRequest().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void>deleteCourse(@PathVariable  Long id){
+            try{
+                  boolean deleted =  courseService.deleteCourse(id);
+                  return deleted ? ResponseEntity.ok().build():ResponseEntity.badRequest().build();
+            }catch(ResourceNotFoundException ex){
+                return ResponseEntity.notFound().build();
+            }
     }
 }
