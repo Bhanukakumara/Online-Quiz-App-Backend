@@ -83,7 +83,6 @@ public class CourseServiceImpl implements CourseService {
     course.setUser(admin);
 
     courseRepository.save(course);
-
     return getCourseById(id);
 
     }
