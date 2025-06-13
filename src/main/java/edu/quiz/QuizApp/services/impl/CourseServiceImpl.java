@@ -71,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Optional<GetCourseDto> updateCourse(UpdateCourseDto updateCourseDto) {
+    public Optional<GetCourseDto> updateCourse(Long id,UpdateCourseDto updateCourseDto) {
          Course course = courseRepository.findById(updateCourseDto.getId())
             .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + updateCourseDto.getId()));
 
@@ -84,7 +84,7 @@ public class CourseServiceImpl implements CourseService {
 
     courseRepository.save(course);
 
-    return getCourseById(course.getId());
+    return getCourseById(id);
 
     }
 

@@ -52,9 +52,9 @@ public class CourseController {
         return ResponseEntity.ok(courseService.totalCourseCount());
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<GetCourseDto>updateCourse(@RequestBody UpdateCourseDto updateCourseDto){
-        Optional<GetCourseDto>updatedCourse =courseService.updateCourse(updateCourseDto);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<GetCourseDto>updateCourse(@PathVariable Long id,@RequestBody UpdateCourseDto updateCourseDto){
+        Optional<GetCourseDto>updatedCourse =courseService.updateCourse(id,updateCourseDto);
         return updatedCourse.map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.badRequest().build());
     }

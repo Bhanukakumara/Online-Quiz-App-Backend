@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CourseService {
     Optional<GetCourseDto> createCourse(CreateCourseDto createCourseDto);
-    Optional<GetCourseDto>updateCourse(UpdateCourseDto updateCourseDto);
+    Optional<GetCourseDto>updateCourse(Long id,UpdateCourseDto updateCourseDto);
     Optional<List<GetCourseDto>> getAllCourses();
     Optional<GetCourseDto> getCourseById(long id);
     Optional<List<GetCourseDto>> getAllCoursesByUserId(long userId);
