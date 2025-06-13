@@ -1,7 +1,9 @@
 package edu.quiz.QuizApp.services.impl;
 
+import edu.quiz.QuizApp.ResourceNotFoundException;
 import edu.quiz.QuizApp.dtos.course.CreateCourseDto;
 import edu.quiz.QuizApp.dtos.course.GetCourseDto;
+import edu.quiz.QuizApp.dtos.course.UpdateCourseDto;
 import edu.quiz.QuizApp.entites.Course;
 import edu.quiz.QuizApp.entites.User;
 import edu.quiz.QuizApp.repositories.CourseRepository;
@@ -67,4 +69,31 @@ public class CourseServiceImpl implements CourseService {
     public Long totalCourseCount() {
         return courseRepository.count();
     }
+
+    @Override
+    public Optional<GetCourseDto> updateCourse(UpdateCourseDto updateCourseDto) {
+         Course course = courseRepository.findById(updateCourseDto.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + updateCourseDto.getId()));
+
+    User admin = userRepository.findById(updateCourseDto.getAdminId())
+            .orElseThrow(() -> new ResourceNotFoundException("Admin user not found with id: " + updateCourseDto.getAdminId()));
+
+    course.setName(updateCourseDto.getName());
+    course.setDescription(updateCourseDto.getDescription());
+    course.setUser(admin);
+
+    Course updatedCourse = courseRepository.save(course);
+
+    return Optional.of(courseToGetCourseDto(updatedCourse));
+    }
+
+    @Override
+    public Boolean deleteCourse(Long courseId) {
+         Course course = courseRepository.findById(courseId)
+            .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
+
+    courseRepository.delete(course);
+    return true;
+    }
+
 }
